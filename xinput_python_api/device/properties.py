@@ -1,6 +1,7 @@
+import subprocess
 from collections import UserList
 from dataclasses import dataclass
-import subprocess
+
 
 @dataclass
 class Property:
@@ -10,8 +11,8 @@ class Property:
     values: list[str]
 
     def change_value(new_value: str):
-        self.values = new_value.split(' ')
-        subprocess.run(['xinput', 'set-prop', str(dev_id), str(id), new_value])
+        self.values = new_value.split(" ")
+        subprocess.run(["xinput", "set-prop", str(dev_id), str(id), new_value])
 
 
 class Properties(UserList):
@@ -20,10 +21,10 @@ class Properties(UserList):
         self.__prop_names = []
         props = []
         for key, value in props_dict.items():
-            prop_id = value['prop_id']
+            prop_id = value["prop_id"]
             prop_name = key
-            prop_dev_id = value['dev_id']
-            prop_values = value['values']
+            prop_dev_id = value["dev_id"]
+            prop_values = value["values"]
 
             prop = Property(prop_id, prop_name, prop_dev_id, prop_values)
 
@@ -44,11 +45,23 @@ class Properties(UserList):
             if property.name == name:
                 return property
 
-    def get_property(self, id_or_name: int | str) -> Property:
-        if isinstance(id_or_name, int):
-            return _get_property_by_id(id_or_name)
-        elif isinstance(id_or_name, str):
-            return _get_property_by_name(id_or_name)
+    def get_property(self, prop_id_or_name: int | str) -> Property:
+        if isinstance(prop_id_or_name, int):
+            return _get_property_by_id(prop_id_or_name)
+        elif isinstance(prop_id_or_name, str):
+            return _get_property_by_name(prop_id_or_name)
+
+    def delete(self, prop_id_or_name: int | str):
+        required_property = self.get_property(prop_id_or_name)
+        subprocess.run(
+            [
+                "xinput",
+                "delete-prop",
+                str(required_property.dev_id),
+                str(required_property.id),
+            ]
+        )
+        self.data.remove(required_property)
 
     def __contains__(self, item: int | str | Property) -> bool:
         if isinstance(item, int):
@@ -57,4 +70,3 @@ class Properties(UserList):
             return item in self.__prop_names
         elif isinstance(item, Property):
             return item in self.data
- 
