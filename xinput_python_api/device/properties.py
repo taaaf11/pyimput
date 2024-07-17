@@ -16,8 +16,8 @@ class Property:
 
 class Properties(UserList):
     def __init__(self, props_dict: dict):
-        self.prop_ids = []
-        self.prop_names = []
+        self.__prop_ids = []
+        self.__prop_names = []
         props = []
         for key, value in props_dict.items():
             prop_id = value['prop_id']
@@ -27,8 +27,8 @@ class Properties(UserList):
 
             prop = Property(prop_id, prop_name, prop_dev_id, prop_values)
 
-            self.prop_ids.append(prop_id)
-            self.prop_names.append(prop_name)
+            self.__prop_ids.append(prop_id)
+            self.__prop_names.append(prop_name)
 
             props.append(prop)
 
@@ -52,9 +52,9 @@ class Properties(UserList):
 
     def __contains__(self, item: int | str | Property) -> bool:
         if isinstance(item, int):
-            return item in self.prop_ids
+            return item in self.__prop_ids
         elif isinstance(item, str):
-            return item in self.prop_names
+            return item in self.__prop_names
         elif isinstance(item, Property):
             return item in self.data
  
