@@ -34,7 +34,7 @@ def get_device_props(dev_id: int) -> dict:
     )
 
     for dev_prop_line in dev_prop_lines:
-        dev_props.update(get_prop_details_from_prop_line(dev_prop_line))
+        dev_props.update(get_prop_details_from_prop_line(dev_id, dev_prop_line))
 
     return dev_props
 

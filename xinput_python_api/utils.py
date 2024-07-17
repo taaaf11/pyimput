@@ -15,7 +15,7 @@ def clean_split(line_split: list[str]):
     return [word for word in line_split if word not in useless_chars]
 
 
-def get_prop_details_from_prop_line(prop_line: str) -> dict:
+def get_prop_details_from_prop_line(dev_id:int, prop_line: str) -> dict:
     prop_details = {}
     prop_line_split = prop_line.split()
     for word in prop_line_split:
@@ -34,7 +34,7 @@ def get_prop_details_from_prop_line(prop_line: str) -> dict:
             prop_values: list = [prop_value.strip() for prop_value in prop_values]
 
             prop_details.update(
-                    {prop_id: {"prop_id": prop_id, "prop_name": prop_name, "values": prop_values}}
+                    {prop_name: {"dev_id": dev_id, "prop_id": prop_id, "prop_name": prop_name, "values": prop_values}}
             )
 
     return prop_details

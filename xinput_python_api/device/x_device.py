@@ -1,4 +1,5 @@
 import subprocess
+from .properties import Properties
 
 
 class XInputDevice:
@@ -6,7 +7,7 @@ class XInputDevice:
         self.id = device_data['id']
         self.master_id = device_data['master_id']
         self.name = device_data['device_name']
-        self.props = device_data['props']
+        self.props = Properties(device_data['props'])
 
     def list_props(self):
         print(self.props)
