@@ -40,7 +40,9 @@ def get_device_props(dev_id: int) -> dict:
 
 
 def get_devices_data():
-    xinput_list_out_lines = get_command_output(["xinput", "list"]).decode().split("\n")[:-1]  # last one is empty string
+    xinput_list_out_lines = (
+        get_command_output(["xinput", "list"]).decode().split("\n")[:-1]
+    )  # last one is empty string
     pointer_started = False
     dev_count = 0
     devs_data = {}

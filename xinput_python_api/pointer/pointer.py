@@ -10,7 +10,15 @@ class XPointer(XInputDevice):
         self.__buttons_map = XPointerButtons(
             pointer_data["id"], pointer_data["button_map"], debug=debug
         )
-        self.change_button_map = lambda: setattr(self, '__buttons_map', XPointerButtons(pointer_data["id"], pointer_data["button_map"], self.__buttons_map.buttons_map))
+        self.change_button_map = lambda: setattr(
+            self,
+            "__buttons_map",
+            XPointerButtons(
+                pointer_data["id"],
+                pointer_data["button_map"],
+                self.__buttons_map.buttons_map,
+            ),
+        )
 
     @property
     def buttons_map(self):

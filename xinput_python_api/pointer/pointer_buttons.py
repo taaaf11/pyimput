@@ -6,7 +6,7 @@ class XPointerButtons:
         self.dev_id = dev_id
         self.__buttons_map = buttons_map
         self.debug = debug
-    
+
     @property
     def buttons_map(self):
         return self.__buttons_map

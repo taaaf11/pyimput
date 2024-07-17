@@ -1,10 +1,14 @@
 import subprocess
-from .pointer import XPointer
+
 from .device import XInputDevice
+from .pointer import XPointer
 
 
 def get_command_output(command: list):
     return subprocess.run(command, capture_output=True).stdout
+
+
+run_command = subprocess.run
 
 
 def slugify_label(label: str):
@@ -17,7 +21,7 @@ def clean_split(line_split: list[str]):
     return [word for word in line_split if word not in useless_chars]
 
 
-def get_prop_details_from_prop_line(dev_id:int, prop_line: str) -> dict:
+def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> dict:
     prop_details = {}
     prop_line_split = prop_line.split()
     for word in prop_line_split:
@@ -36,7 +40,14 @@ def get_prop_details_from_prop_line(dev_id:int, prop_line: str) -> dict:
             prop_values: list = [prop_value.strip() for prop_value in prop_values]
 
             prop_details.update(
-                    {prop_name: {"dev_id": dev_id, "prop_id": prop_id, "prop_name": prop_name, "values": prop_values}}
+                {
+                    prop_name: {
+                        "dev_id": dev_id,
+                        "prop_id": prop_id,
+                        "prop_name": prop_name,
+                        "values": prop_values,
+                    }
+                }
             )
 
     return prop_details
@@ -45,7 +56,7 @@ def get_prop_details_from_prop_line(dev_id:int, prop_line: str) -> dict:
 def get_all_devices(pointers_data: dict, debug=False):
     pointers = []
     for pointer_data in pointers_data.values():
-        if pointer_data['button_map'] is None:
+        if pointer_data["button_map"] is None:
             pointers.append(XInputDevice(pointer_data))
         else:
             pointers.append(XPointer(pointer_data, debug=debug))
