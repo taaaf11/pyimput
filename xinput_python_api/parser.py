@@ -1,6 +1,6 @@
 import subprocess
 
-from utils import (clean_split, get_command_output,
+from .utils import (clean_split, get_command_output,
                     get_prop_details_from_prop_line, slugify_label)
 
 

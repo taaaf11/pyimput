@@ -34,7 +34,7 @@ def get_prop_details_from_prop_line(prop_line: str) -> dict:
             prop_values: list = [prop_value.strip() for prop_value in prop_values]
 
             prop_details.update(
-                {"prop_id": prop_id, "prop_name": prop_name, "values": prop_values}
+                    {prop_id: {"prop_id": prop_id, "prop_name": prop_name, "values": prop_values}}
             )
 
     return prop_details
