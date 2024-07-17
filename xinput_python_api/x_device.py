@@ -1,0 +1,9 @@
+class XInputDevice:
+    def __init__(self, device_data: dict):
+        ...
+
+    def enable(self, ...):
+        ...
+
+    def disable(self, ...):
+        ...
