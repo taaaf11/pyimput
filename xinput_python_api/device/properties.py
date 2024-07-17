@@ -34,6 +34,22 @@ class Properties(UserList):
 
         super().__init__(props)
 
+    def _get_property_by_id(self, id: int) -> Property:
+        for property in self.data:
+            if property.id == id:
+                return property
+
+    def _get_property_by_name(self, name: str) -> Property:
+        for property in self.data:
+            if property.name == name:
+                return property
+
+    def get_property(self, id_or_name: int | str) -> Property:
+        if isinstance(id_or_name, int):
+            return _get_property_by_id(id_or_name)
+        elif isinstance(id_or_name, str):
+            return _get_property_by_name(id_or_name)
+
     def __contains__(self, item: int | str | Property) -> bool:
         if isinstance(item, int):
             return item in self.prop_ids

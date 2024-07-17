@@ -41,3 +41,6 @@ class XPointerButtons:
             self.buttons_map[label] = 0
 
         self._commit()
+
+    def __repr__(self):
+        return f"XPointerButtons(dev_id={self.dev_id}, buttons_map={self.buttons_map.values()})"
