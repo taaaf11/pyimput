@@ -1,6 +1,5 @@
 import subprocess
 
-from ..parser import get_devices_data
 from ..device.x_device import XInputDevice
 from .pointer_buttons import XPointerButtons
 
@@ -8,9 +7,13 @@ from .pointer_buttons import XPointerButtons
 class XPointer(XInputDevice):
     def __init__(self, pointer_data: dict, debug=False):
         super().__init__(pointer_data)
-        self.buttons_map = XPointerButtons(
+        self.__buttons_map = XPointerButtons(
             pointer_data["id"], pointer_data["button_map"], debug=debug
         )
+
+    @property
+    def buttons_map(self):
+        return self.__buttons_map
 
     def __getattr__(self, attr):
         if attr.startswith("disable_"):
@@ -20,9 +23,5 @@ class XPointer(XInputDevice):
             button_label_to_enable = attr.removeprefix("enable_")
             return lambda: self.buttons_map.enable_single(button_label_to_enable)
 
-
-def get_mouse_pointers(pointers_data: dict, debug=False):
-    pointers = []
-    for pointer_data in pointers_data.values():
-        pointers.append(XPointer(pointer_data, debug=debug))
-    return pointers
+    def __repr__(self):
+        return f"XPointer(id={self.id}, name={self.name}, master_id={self.master_id}, buttons_map={self.buttons_map})"
