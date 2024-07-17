@@ -83,6 +83,3 @@ def get_devices_data():
 
     return devs_data
 
-
-if __name__ == "__main__":
-    print(get_devices_data())

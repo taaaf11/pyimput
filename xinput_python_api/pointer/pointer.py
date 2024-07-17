@@ -5,10 +5,10 @@ from .pointer_buttons import XPointerButtons
 
 
 class XPointer(XInputDevice):
-    def __init__(self, pointer_data: dict, debug=False):
+    def __init__(self, pointer_data: dict):
         super().__init__(pointer_data)
         self.__buttons_map = XPointerButtons(
-            pointer_data["id"], pointer_data["button_map"], debug=debug
+            pointer_data["id"], pointer_data["button_map"]
         )
         self.change_button_map = lambda: setattr(
             self,

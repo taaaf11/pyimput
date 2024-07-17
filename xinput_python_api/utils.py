@@ -11,6 +11,7 @@ def get_command_output(command: list):
 run_command = subprocess.run
 
 
+# not exactly a slug, but for naming ¯\_(ツ)_/¯
 def slugify_label(label: str):
     slugified_label = label.lower().replace(" ", "_")
     return slugified_label
@@ -53,11 +54,11 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> dict:
     return prop_details
 
 
-def get_all_devices(pointers_data: dict, debug=False):
-    pointers = []
-    for pointer_data in pointers_data.values():
-        if pointer_data["button_map"] is None:
-            pointers.append(XInputDevice(pointer_data))
+def get_all_devices(pointers_data: dict):
+    devs = []
+    for dev_data in pointers_data.values():
+        if dev_data["button_map"] is None:
+            devs.append(XInputDevice(dev_data))
         else:
-            pointers.append(XPointer(pointer_data, debug=debug))
+            devs.append(XPointer(dev_data))
     return pointers
