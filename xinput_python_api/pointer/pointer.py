@@ -1,6 +1,6 @@
 import subprocess
 
-from ..device.x_device import XInputDevice
+from ..device import XInputDevice
 from .pointer_buttons import XPointerButtons
 
 

@@ -82,4 +82,3 @@ def get_devices_data():
         )
 
     return devs_data
-

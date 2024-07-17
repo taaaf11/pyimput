@@ -61,4 +61,4 @@ def get_all_devices(pointers_data: dict):
             devs.append(XInputDevice(dev_data))
         else:
             devs.append(XPointer(dev_data))
-    return pointers
+    return devs

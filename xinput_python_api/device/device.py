@@ -1,9 +1,19 @@
 import subprocess
 
-from utils import get_command_output, run_command
-
 from ..type import XInputDeviceMode
 from .properties import Properties
+
+# fix circular import
+# from ..utils import get_command_output, run_command
+
+
+
+# fix circular import
+def get_command_output(command: list):
+    return subprocess.run(command, capture_output=True).stdout
+
+
+run_command = subprocess.run
 
 
 class XInputDevice:
