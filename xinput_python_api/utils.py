@@ -1,4 +1,6 @@
 import subprocess
+from .pointer import XPointer
+from .device import XInputDevice
 
 
 def get_command_output(command: list):
@@ -38,3 +40,13 @@ def get_prop_details_from_prop_line(dev_id:int, prop_line: str) -> dict:
             )
 
     return prop_details
+
+
+def get_all_devices(pointers_data: dict, debug=False):
+    pointers = []
+    for pointer_data in pointers_data.values():
+        if pointer_data['button_map'] is None:
+            pointers.append(XInputDevice(pointer_data))
+        else:
+            pointers.append(XPointer(pointer_data, debug=debug))
+    return pointers
