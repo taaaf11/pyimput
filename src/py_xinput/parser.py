@@ -7,7 +7,7 @@ from .utils import (clean_split, get_command_output,
 
 def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
     dev_classes = (
-        get_command_output(["xinput", "list", str(dev_id)]).decode().split("\n")
+        get_command_output(["xinput", "list", str(dev_id)]).split("\n")
     )
 
     supported_button_labels = dev_classes[4].split(":")[1].strip().split('"')
@@ -16,6 +16,13 @@ def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
         for sup_label in supported_button_labels
         if sup_label.replace(" ", "").isalpha()
     ]
+
+    for sup_button_label in supported_button_labels.copy():
+        if "none" in sup_button_label:
+            split = sup_button_label.strip('_').split('_')
+            for none_c, none in enumerate(split):
+                supported_button_labels.append(none+'_'+str(none_c))
+            supported_button_labels.remove(sup_button_label)
 
     button_map = dict(
         list(
@@ -30,7 +37,6 @@ def get_device_props(dev_id: int) -> PropsDict:
     dev_props = {}
     dev_prop_lines = (
         get_command_output(["xinput", "list-props", str(dev_id)])
-        .decode()
         .split("\n")[1:]
     )
 
@@ -42,7 +48,7 @@ def get_device_props(dev_id: int) -> PropsDict:
 
 def get_devices_data() -> DeviceDataDict:
     xinput_list_out_lines = (
-        get_command_output(["xinput", "list"]).decode().split("\n")[:-1]
+        get_command_output(["xinput", "list"]).split("\n")[:-1]
     )  # last one is empty string
     devs_data = {}
     dev_count = 0
@@ -81,5 +87,7 @@ def get_devices_data() -> DeviceDataDict:
                 }
             }
         )
+        if is_pointer:
+            print(f"Device name: {dev_name}, button_map: {button_map}")
 
     return devs_data

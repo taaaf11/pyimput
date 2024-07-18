@@ -1,13 +1,11 @@
 import subprocess
 from typing import Sequence, List
 
-from .device import XInputDevice
-from .pointer import XPointer
 from .type import PropsDict
 
 
 def get_command_output(command: list):
-    return subprocess.run(command, capture_output=True).stdout
+    return subprocess.run(command, capture_output=True).stdout.decode()
 
 
 run_command = subprocess.run
