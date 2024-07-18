@@ -1,0 +1,15 @@
+[project]
+name = "py-xinput"
+version = "0.0.1"
+authors = [
+  { name="Muhammad Altaaf", email="taafuuu@gmail.com" }
+]
+description = "A small package aiming to provide functions for calling `xinput` commands through python code."
+readme = "README.md"
+requires-python = ">=3.11.2"
+optional-dependencies = { dev = ["pytest"] }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+
+]
