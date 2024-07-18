@@ -15,7 +15,7 @@ class XPointerButtons:
         return self.__buttons_map
 
     @property
-    def debug() -> bool:
+    def debug(self) -> bool:
         return self.__debug
 
     def commit(self) -> OptionalString:
