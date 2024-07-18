@@ -42,11 +42,11 @@ class XInputDevice:
         return self.__debug
 
     def query_state(self, loop=False) -> str:
-        command = ["xinput", "query-state", str(dev_id)]
+        command = ["xinput", "query-state", str(self.id)]
         return get_command_output(command)
 
     def get_feedbacks(self, loop=False) -> str:
-        command = ["xinput", "get-feedbacks", str(dev_id)]
+        command = ["xinput", "get-feedbacks", str(self.id)]
         return get_command_output(command)
 
     def set_prop(self, id_or_name: Union[int, str], new_value: str) -> None:
@@ -54,17 +54,17 @@ class XInputDevice:
         required_property.change_value(new_value)
 
     def set_mode(self, mode: XInputDeviceMode) -> None:
-        command = ["xinput", "set-mode", str(dev_id), mode.name]
+        command = ["xinput", "set-mode", str(self.id), mode.name]
         run_command(command)
 
     def set_floating(self) -> None:
         self.__master_id = None
-        command = ["xinput", "float", str(dev_id)]
+        command = ["xinput", "float", str(self.id)]
         run_command(command)
 
     def reattach(self, master_id: int) -> None:
         self.__master_id = master_id
-        command = ["xinput", "reattach", str(self.dev_id), str(master_id)]
+        command = ["xinput", "reattach", str(self.id), str(master_id)]
         run_command(command)
 
     def enable(self) -> None:
