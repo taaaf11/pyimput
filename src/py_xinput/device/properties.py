@@ -13,12 +13,12 @@ class Property:
     values: list[str]
     debug: False
 
-    def change_value(new_value: str) -> None:
+    def change_value(self, new_value: str) -> None:
         self.values = new_value.split(" ")
         if self.debug:
             return self.values
         else:
-            subprocess.run(["xinput", "set-prop", str(dev_id), str(id), new_value])
+            subprocess.run(["xinput", "set-prop", str(self.dev_id), str(self.id), new_value])
 
 
 class Properties(UserList):
@@ -55,9 +55,9 @@ class Properties(UserList):
 
     def get_property(self, prop_id_or_name: Union[int, str]) -> Property:
         if isinstance(prop_id_or_name, int):
-            return _get_property_by_id(prop_id_or_name)
+            return self._get_property_by_id(prop_id_or_name)
         elif isinstance(prop_id_or_name, str):
-            return _get_property_by_name(prop_id_or_name)
+            return self._get_property_by_name(prop_id_or_name)
 
     def delete(self, prop_id_or_name: Union[int, str]) -> None:
         required_property = self.get_property(prop_id_or_name)
