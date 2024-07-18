@@ -29,14 +29,14 @@ class XPointerButtons:
             list(self.buttons_map.keys()).index(button_label) + 1
         )
 
+    def disable_single(self, button_label: str) -> None:
+        self.__buttons_map[button_label] = 0
+
     def enable_multiple(self, button_labels: Sequence[str]) -> None:
         for label in button_labels:
             self.__buttons_map[label] = list(self.buttons_map.keys()).index(label) + 1
 
-    def disable_single(self, button_label: str) -> None:
-        self.__buttons_map[button_label] = 0
-
-    def disable_multiple(self, button_labels: list[str]) -> None:
+    def disable_multiple(self, button_labels: Sequence[str]) -> None:
         for label in labels:
             self.__buttons_map[label] = 0
 

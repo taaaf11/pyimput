@@ -1,12 +1,12 @@
 import subprocess
 
 from ..device import XInputDevice
-from ..type import ButtonsMapDict
+from ..type import ButtonsMapDict, DeviceDataDict
 from .pointer_buttons import XPointerButtons
 
 
 class XPointer(XInputDevice):
-    def __init__(self, pointer_data: dict) -> None:
+    def __init__(self, pointer_data: DeviceDataDict) -> None:
         super().__init__(pointer_data)
         self.__buttons_map = XPointerButtons(
             pointer_data["id"], pointer_data["button_map"]
