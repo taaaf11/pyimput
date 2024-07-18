@@ -6,8 +6,6 @@ from .properties import Properties
 # fix circular import
 # from ..utils import get_command_output, run_command
 
-
-
 # fix circular import
 def get_command_output(command: list):
     return subprocess.run(command, capture_output=True).stdout
@@ -24,66 +22,55 @@ class XInputDevice:
         self.__props = Properties(device_data["props"])
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self.__id
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @property
-    def master_id(self):
+    def master_id(self) -> int:
         return self.__master_id
 
     @property
-    def props(self):
+    def props(self) -> Properties:
         return self.__props
 
-    def query_state(self, loop=False):
+    def query_state(self, loop=False) -> str:
         command = ["xinput", "query-state", str(dev_id)]
-        if loop:
-            while True:
-                output = get_command_output(command)
-                print(output)
-        else:
-            output = get_command_output(command)
-            print(output)
+        return get_command_output(command)
 
-    def get_feedbacks(self, loop=False):
+    def get_feedbacks(self, loop=False) -> str:
         command = ["xinput", "get-feedbacks", str(dev_id)]
-        if loop:
-            while True:
-                output = get_command_output(command)
-                print(output)
-        else:
-            output = get_command_output(command)
-            print(output)
+        return get_comman_output(command)
 
-    def set_prop(self, id_or_name: int | str, new_value: str):
+    def set_prop(self, id_or_name: int | str, new_value: str) -> None:
         required_property = self.props.get_property(id_or_name)
         required_property.change_value(new_value)
 
-    def set_mode(self, mode: XInputDeviceMode):
+    def set_mode(self, mode: XInputDeviceMode) -> None:
         command = ["xinput", "set-mode", str(dev_id), mode.name]
         run_command(command)
 
-    def set_floating(self):
+    def set_floating(self) -> None:
+        self.__master_id = None
         command = ["xinput", "float", str(dev_id)]
         run_command(command)
 
-    def reattach(self, master_id: None):
-        master_id = x or self.master_id
+    def reattach(self, master_id) -> None:
+        self.__master_id = master_id
         command = ["xinput", "reattach", str(self.dev_id), str(master_id)]
         run_command(command)
 
-    def enable(self):
+    def enable(self) -> None:
         self.set_prop("device_enabled", "1")
 
-    def disable(self):
+    def disable(self) -> None:
         self.set_prop("device_enabled", "0")
 
-    def delete_property(self, prop_id_or_name: int | str):
+    def delete_property(self, prop_id_or_name: int | str) -> None:
         self.props.delete(prop_id_or_name)
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         return f"XInputDevice(id={self.id}, name={self.name}, master_id={self.master_id}, props={self.props})"

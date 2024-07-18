@@ -1,10 +1,11 @@
 import subprocess
+from .type import DeviceDataDict, PropsDict, ButtonsMapDict
 
 from .utils import (clean_split, get_command_output,
                     get_prop_details_from_prop_line, slugify_label)
 
 
-def get_mouse_button_map(dev_id: int) -> dict:
+def get_pointer_button_map(dev_id: int) -> ButtonMapDict:
     dev_classes = (
         get_command_output(["xinput", "list", str(dev_id)]).decode().split("\n")
     )
@@ -25,7 +26,7 @@ def get_mouse_button_map(dev_id: int) -> dict:
     return button_map
 
 
-def get_device_props(dev_id: int) -> dict:
+def get_device_props(dev_id: int) -> PropsDict:
     dev_props = {}
     dev_prop_lines = (
         get_command_output(["xinput", "list-props", str(dev_id)])
@@ -39,20 +40,20 @@ def get_device_props(dev_id: int) -> dict:
     return dev_props
 
 
-def get_devices_data():
+def get_devices_data() -> DeviceDataDict:
     xinput_list_out_lines = (
         get_command_output(["xinput", "list"]).decode().split("\n")[:-1]
     )  # last one is empty string
-    pointer_started = False
+    is_pointer = False
     dev_count = 0
     devs_data = {}
 
     for output_line in xinput_list_out_lines:
         if "Virtual core pointer" in output_line:
-            pointer_started = True
+            is_pointer = True
             continue
         if "Virtual core keyboard" in output_line:
-            pointer_started = False
+            is_pointer = False
             continue
 
         line_split = clean_split(output_line.split())
@@ -64,8 +65,8 @@ def get_devices_data():
 
         dev_count += 1
 
-        if pointer_started:
-            button_map = get_mouse_button_map(dev_id)
+        if is_pointer:
+            button_map = get_pointer_button_map(dev_id)
         else:
             button_map = None
 

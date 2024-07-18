@@ -1,7 +1,9 @@
 import subprocess
+from typing import Sequence, List
 
 from .device import XInputDevice
 from .pointer import XPointer
+from .type import PropsDict
 
 
 def get_command_output(command: list):
@@ -12,17 +14,17 @@ run_command = subprocess.run
 
 
 # not exactly a slug, but for naming ¯\_(ツ)_/¯
-def slugify_label(label: str):
+def slugify_label(label: str) -> str:
     slugified_label = label.lower().replace(" ", "_")
     return slugified_label
 
 
-def clean_split(line_split: list[str]):
+def clean_split(line_split: Sequence[str]) -> List[str]:
     useless_chars = "⎡⎜⎣↳"
     return [word for word in line_split if word not in useless_chars]
 
 
-def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> dict:
+def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
     prop_details = {}
     prop_line_split = prop_line.split()
     for word in prop_line_split:
@@ -34,11 +36,11 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> dict:
             index_of_property: int = prop_line_split.index(word)
 
             prop_id = int(word.strip("(:)"))
-            prop_name: str = "_".join(prop_line_split[:index_of_property]).lower()
-            prop_values: list = " ".join(
+            prop_name = "_".join(prop_line_split[:index_of_property]).lower()
+            prop_values = " ".join(
                 prop_line_split[(index_of_property + 1) :]
             ).split(",")
-            prop_values: list = [prop_value.strip() for prop_value in prop_values]
+            prop_values = [prop_value.strip() for prop_value in prop_values]
 
             prop_details.update(
                 {
@@ -53,12 +55,3 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> dict:
 
     return prop_details
 
-
-def get_all_devices(pointers_data: dict):
-    devs = []
-    for dev_data in pointers_data.values():
-        if dev_data["button_map"] is None:
-            devs.append(XInputDevice(dev_data))
-        else:
-            devs.append(XPointer(dev_data))
-    return devs
