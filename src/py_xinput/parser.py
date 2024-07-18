@@ -5,7 +5,7 @@ from .utils import (clean_split, get_command_output,
                     get_prop_details_from_prop_line, slugify_label)
 
 
-def get_pointer_button_map(dev_id: int) -> ButtonMapDict:
+def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
     dev_classes = (
         get_command_output(["xinput", "list", str(dev_id)]).decode().split("\n")
     )
@@ -44,9 +44,9 @@ def get_devices_data() -> DeviceDataDict:
     xinput_list_out_lines = (
         get_command_output(["xinput", "list"]).decode().split("\n")[:-1]
     )  # last one is empty string
-    is_pointer = False
-    dev_count = 0
     devs_data = {}
+    dev_count = 0
+    is_pointer = False
 
     for output_line in xinput_list_out_lines:
         if "Virtual core pointer" in output_line:

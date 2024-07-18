@@ -1,5 +1,5 @@
 import subprocess
-
+from typing import Union, Sequence, List
 from ..type import XInputDeviceMode
 from .properties import Properties
 
@@ -7,7 +7,7 @@ from .properties import Properties
 # from ..utils import get_command_output, run_command
 
 # fix circular import
-def get_command_output(command: list):
+def get_command_output(command: List[str]):
     return subprocess.run(command, capture_output=True).stdout
 
 
@@ -19,8 +19,7 @@ class XInputDevice:
         self.__id = device_data["id"]
         self.__name = device_data["device_name"]
         self.__master_id = device_data["master_id"]
-        self.__props = Properties(device_data["props"])
-        self.debug = debug
+        self.__props = Properties(device_data["props"], debug)
 
     @property
     def id(self) -> int:
@@ -37,6 +36,10 @@ class XInputDevice:
     @property
     def props(self) -> Properties:
         return self.__props
+
+    @property
+    def debug(self) -> bool:
+        return self.__debug
 
     def query_state(self, loop=False) -> str:
         command = ["xinput", "query-state", str(dev_id)]

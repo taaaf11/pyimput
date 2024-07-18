@@ -22,7 +22,7 @@ class Property:
 
 
 class Properties(UserList):
-    def __init__(self, props_dict: dict) -> None:
+    def __init__(self, props_dict: dict, debug=False) -> None:
         self.__prop_ids = []
         self.__prop_names = []
         props = []
@@ -32,7 +32,7 @@ class Properties(UserList):
             prop_dev_id = value["dev_id"]
             prop_values = value["values"]
 
-            prop = Property(prop_id, prop_name, prop_dev_id, prop_values)
+            prop = Property(prop_id, prop_name, prop_dev_id, prop_values, debug)
 
             self.__prop_ids.append(prop_id)
             self.__prop_names.append(prop_name)
@@ -40,6 +40,8 @@ class Properties(UserList):
             props.append(prop)
 
         super().__init__(props)
+
+        self.__debug = debug
 
     def _get_property_by_id(self, id: int) -> Property:
         for property in self.data:
@@ -59,7 +61,7 @@ class Properties(UserList):
 
     def delete(self, prop_id_or_name: Union[int, str]) -> None:
         required_property = self.get_property(prop_id_or_name)
-        if required_property.debug:
+        if self.__debug:
             self.data.remove(required_property)
             return self.data
         else:

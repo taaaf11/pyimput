@@ -1,17 +1,22 @@
 import subprocess
 
-from ..type import ButtonsMapDict
+from ..type import ButtonsMapDict, OptionalString
+from typing import Sequence
 
 
 class XPointerButtons:
     def __init__(self, dev_id: int, buttons_map: dict, debug=False):
         self.dev_id = dev_id
         self.__buttons_map = buttons_map
-        self.debug = debug
+        self.__debug = debug
 
     @property
     def buttons_map(self) -> ButtonsMapDict:
         return self.__buttons_map
+
+    @property
+    def debug() -> bool:
+        return self.__debug
 
     def commit(self) -> OptionalString:
         button_states = self.buttons_map.values()
