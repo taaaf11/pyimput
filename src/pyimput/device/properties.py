@@ -1,7 +1,6 @@
 import subprocess
 from collections import UserList
 from dataclasses import dataclass
-
 from typing import Union
 
 
@@ -18,7 +17,9 @@ class Property:
         if self.debug:
             return self.values
         else:
-            subprocess.run(["sh", "-c", f"xinput set-prop {self.dev_id} {self.id} {new_value}"])
+            subprocess.run(
+                ["sh", "-c", f"xinput set-prop {self.dev_id} {self.id} {new_value}"]
+            )
 
 
 class Properties(UserList):

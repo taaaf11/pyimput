@@ -1,7 +1,7 @@
 import subprocess
+from typing import Sequence
 
 from type import ButtonsMapDict, OptionalString
-from typing import Sequence
 
 
 class XPointerButtons:
@@ -18,7 +18,9 @@ class XPointerButtons:
     def available_buttons(self) -> list:
         buttons = []
         for button_label in self.buttons_map.keys():
-            better_label = " ".join(label.capitalize() for label in button_label.replace("_", " ").split())
+            better_label = " ".join(
+                label.capitalize() for label in button_label.replace("_", " ").split()
+            )
             buttons.append(better_label)
         return buttons
 
@@ -38,7 +40,9 @@ class XPointerButtons:
 
     def swap_with(self, button_label_to_swap: str, button_label_to_swap_with: str):
         temp = self.buttons_map[button_label_to_swap]
-        self.buttons_map[button_label_to_swap] = self.buttons_map[button_label_to_swap_with]
+        self.buttons_map[button_label_to_swap] = self.buttons_map[
+            button_label_to_swap_with
+        ]
         self.buttons_map[button_label_to_swap_with] = temp
         self.commit()
 

@@ -1,14 +1,16 @@
 import subprocess
-from type import DeviceDataDict, PropsDict, ButtonsMapDict
 
-from utils import (clean_split, get_command_output,
-                    get_prop_details_from_prop_line, slugify_label)
+from type import ButtonsMapDict, DeviceDataDict, PropsDict
+from utils import (
+    clean_split,
+    get_command_output,
+    get_prop_details_from_prop_line,
+    slugify_label,
+)
 
 
 def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
-    dev_classes = (
-        get_command_output(["xinput", "list", str(dev_id)]).split("\n")
-    )
+    dev_classes = get_command_output(["xinput", "list", str(dev_id)]).split("\n")
 
     supported_button_labels = dev_classes[4].split(":")[1].strip().split('"')
     supported_button_labels = [
@@ -19,9 +21,9 @@ def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
 
     for sup_button_label in supported_button_labels.copy():
         if "none" in sup_button_label:
-            split = sup_button_label.strip('_').split('_')
+            split = sup_button_label.strip("_").split("_")
             for none_c, none in enumerate(split):
-                supported_button_labels.append(none+'_'+str(none_c))
+                supported_button_labels.append(none + "_" + str(none_c))
             supported_button_labels.remove(sup_button_label)
 
     button_map = dict(
@@ -35,15 +37,15 @@ def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
 
 def get_device_props(dev_id: int) -> PropsDict:
     dev_props = {}
-    dev_prop_lines = (
-        get_command_output(["xinput", "list-props", str(dev_id)])
-        .split("\n")[1:]
-    )
+    dev_prop_lines = get_command_output(["xinput", "list-props", str(dev_id)]).split(
+        "\n"
+    )[1:]
 
     for dev_prop_line in dev_prop_lines:
         dev_props.update(get_prop_details_from_prop_line(dev_id, dev_prop_line))
 
     return dev_props
+
 
 def get_dev_id(dev_line: str):
     split = clean_split(dev_line.split())
@@ -51,6 +53,7 @@ def get_dev_id(dev_line: str):
         if "id=" in _:
             dev_id = int(_[3:])
     return dev_id
+
 
 def get_dev_master_id(dev_line: str):
     if "master" in dev_line or "floating" in dev_line:
@@ -60,19 +63,22 @@ def get_dev_master_id(dev_line: str):
         master_id = int(split[-1][1:][:-2])
         return master_id
 
+
 def get_dev_name(dev_line: str):
-    dev_line = dev_line[:dev_line.index('[')]  # getting rid of unnecessary details
+    dev_line = dev_line[: dev_line.index("[")]  # getting rid of unnecessary details
     split = clean_split(dev_line.split())
     dev_name = " ".join(split[:-1])
     return dev_name
 
+
 def is_dev_floating(dev_line: str):
     return "floating" in dev_line
 
+
 def get_devices_data() -> DeviceDataDict:
-    xinput_list_out_lines = (
-        get_command_output(["xinput", "list"]).split("\n")[:-1]
-    )  # last one is empty string
+    xinput_list_out_lines = get_command_output(["xinput", "list"]).split("\n")[
+        :-1
+    ]  # last one is empty string
     devs_data = {}
     dev_count = 0
     is_pointer = False

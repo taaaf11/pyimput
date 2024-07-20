@@ -2,6 +2,7 @@ import subprocess
 
 from device import XInputDevice
 from type import ButtonsMapDict, DeviceDataDict
+
 from .pointer_buttons import XPointerButtons
 
 

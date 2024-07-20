@@ -1,5 +1,5 @@
 import subprocess
-from typing import Sequence, List
+from typing import List, Sequence
 
 from type import PropsDict
 
@@ -35,9 +35,9 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
 
             prop_id = int(word.strip("(:)"))
             prop_name = "_".join(prop_line_split[:index_of_property]).lower()
-            prop_values = " ".join(
-                prop_line_split[(index_of_property + 1) :]
-            ).split(",")
+            prop_values = " ".join(prop_line_split[(index_of_property + 1) :]).split(
+                ","
+            )
             prop_values = [prop_value.strip() for prop_value in prop_values]
 
             prop_details.update(
@@ -52,4 +52,3 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
             )
 
     return prop_details
-

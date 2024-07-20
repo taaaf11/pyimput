@@ -1,10 +1,13 @@
 import subprocess
-from typing import Union, Sequence, List
+from typing import List, Sequence, Union
+
 from type import XInputDeviceMode
+
 from .properties import Properties
 
 # fix circular import
 # from ..utils import get_command_output, run_command
+
 
 # fix circular import
 def get_command_output(command: List[str]):
