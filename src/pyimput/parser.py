@@ -47,11 +47,13 @@ def get_device_props(dev_id: int) -> PropsDict:
 
 def get_dev_id(dev_line: str):
     split = clean_split(dev_line.split())
-    dev_id = int(split[-4][3:])
+    for _ in split:
+        if "id=" in _:
+            dev_id = int(_[3:])
     return dev_id
 
 def get_dev_master_id(dev_line: str):
-    if "master" in dev_line:
+    if "master" in dev_line or "floating" in dev_line:
         return None
     else:
         split = clean_split(dev_line.split())
@@ -59,10 +61,13 @@ def get_dev_master_id(dev_line: str):
         return master_id
 
 def get_dev_name(dev_line: str):
+    dev_line = dev_line[:dev_line.index('[')]  # getting rid of unnecessary details
     split = clean_split(dev_line.split())
-    dev_name = " ".join(split[:-4])
+    dev_name = " ".join(split[:-1])
     return dev_name
 
+def is_dev_floating(dev_line: str):
+    return "floating" in dev_line
 
 def get_devices_data() -> DeviceDataDict:
     xinput_list_out_lines = (
@@ -81,6 +86,7 @@ def get_devices_data() -> DeviceDataDict:
         dev_id = get_dev_id(output_line)
         dev_master_id = get_dev_master_id(output_line)
         dev_name = get_dev_name(output_line)
+        dev_is_floating = is_dev_floating(output_line)
         dev_props = get_device_props(dev_id)
 
         dev_count += 1
@@ -96,6 +102,7 @@ def get_devices_data() -> DeviceDataDict:
                     "id": dev_id,
                     "master_id": dev_master_id,
                     "device_name": dev_name,
+                    "is_floating": dev_is_floating,
                     "button_map": button_map,
                     "props": dev_props,
                 }

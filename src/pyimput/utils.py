@@ -18,7 +18,7 @@ def slugify_label(label: str) -> str:
 
 
 def clean_split(line_split: Sequence[str]) -> List[str]:
-    useless_chars = "⎡⎜⎣↳"
+    useless_chars = "⎡⎜⎣↳∼"
     return [word for word in line_split if word not in useless_chars]
 
 
