@@ -1,4 +1,4 @@
-from ..device import XInputDevice
+from device import XInputDevice
 
 
 class XKeyboard(XInputDevice):

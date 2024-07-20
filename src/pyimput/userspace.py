@@ -1,6 +1,7 @@
-from .keyboard import XKeyboard
-from .pointer import XPointer
-from .parser import get_devices_data
+from device import XInputDevice
+from keyboard import XKeyboard
+from pointer import XPointer
+from parser import get_devices_data
 
 
 __all__ = ['get_all_devices', 'get_all_master_devices', 'get_device_by_id', 'get_devices_by_name', 'get_devices_by_master']
@@ -9,10 +10,13 @@ def get_all_devices(debug=False):
     data = get_devices_data()
     devs = []
     for dev_data in data.values():
-        if dev_data["button_map"] is None:
+        dev_name = dev_data["device_name"]
+        if "Keyboard" in dev_name:
             devs.append(XKeyboard(dev_data, debug=debug))
-        else:
+        elif "Mouse" in dev_name:
             devs.append(XPointer(dev_data, debug=debug))
+        else:
+            devs.append(XInputDevice(dev_data, debug=debug))
     return devs
 
 

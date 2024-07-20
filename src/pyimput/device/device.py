@@ -1,6 +1,6 @@
 import subprocess
 from typing import Union, Sequence, List
-from ..type import XInputDeviceMode
+from type import XInputDeviceMode
 from .properties import Properties
 
 # fix circular import

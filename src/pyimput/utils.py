@@ -1,7 +1,7 @@
 import subprocess
 from typing import Sequence, List
 
-from .type import PropsDict
+from type import PropsDict
 
 
 def get_command_output(command: list):

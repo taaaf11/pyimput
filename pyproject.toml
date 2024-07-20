@@ -1,5 +1,5 @@
 [project]
-name = "py-xinput"
+name = "pyimput"
 version = "0.0.1"
 authors = [
   { name="Muhammad Altaaf", email="taafuuu@gmail.com" }

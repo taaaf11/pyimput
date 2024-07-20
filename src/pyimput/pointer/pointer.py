@@ -1,7 +1,7 @@
 import subprocess
 
-from ..device import XInputDevice
-from ..type import ButtonsMapDict, DeviceDataDict
+from device import XInputDevice
+from type import ButtonsMapDict, DeviceDataDict
 from .pointer_buttons import XPointerButtons
 
 
@@ -25,6 +25,10 @@ class XPointer(XInputDevice):
     def buttons_map(self) -> ButtonsMapDict:
         return self.__buttons_map
 
+    def swap_with(self, button_label_to_swap: str, button_label_to_swap_with: str):
+        self.buttons_map.swap_with(button_label_to_swap, button_label_to_swap_with)
+        self.buttons_map.commit()
+
     def __getattr__(self, attr):
         if attr.startswith("enable_") or attr.startswith("disable_"):
             if attr.startswith("disable_"):
@@ -36,7 +40,10 @@ class XPointer(XInputDevice):
             self.change_button_map()
 
             return lambda: self.buttons_map.commit()
-        raise AttributeError(f"'{self.__name__}' has no attribute '{attr}'")
+        else:
+            return lambda: getattr(self.buttons_map, attr)
+        return super().__getattr__(attr)
+        # raise AttributeError(f"'{self.__name__}' has no attribute '{attr}'")
 
     def __repr__(self) -> str:
         return f"XPointer(id={self.id}, name={self.name}, master_id={self.master_id}, buttons_map={self.buttons_map})"

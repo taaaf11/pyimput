@@ -1,3 +1,0 @@
-#!/usr/bin/python3
-
-from py_xinput.src.py_xinput import userspace
