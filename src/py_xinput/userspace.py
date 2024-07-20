@@ -3,39 +3,29 @@ from .pointer import XPointer
 from .parser import get_devices_data
 
 
-__all__ = ['get_all_devices', 'get_all_pointers', 'get_all_keyboards', 'get_device_by_id', 'get_devices_by_name', 'get_devices_by_master']
+__all__ = ['get_all_devices', 'get_all_master_devices', 'get_device_by_id', 'get_devices_by_name', 'get_devices_by_master']
 
 def get_all_devices(debug=False):
     data = get_devices_data()
     devs = []
     for dev_data in data.values():
         if dev_data["button_map"] is None:
-            devs.append(XKeyBoard(dev_data, debug=debug))
+            devs.append(XKeyboard(dev_data, debug=debug))
         else:
             devs.append(XPointer(dev_data, debug=debug))
     return devs
 
-def get_all_pointers(debug=False):
-    all_devs = get_all_devices(debug)
-    pointers = []
-    for dev in all_devs:
-        if dev.__class__.__name__ == 'XPointer':
-            pointers.append(dev)
-    return pointers
 
-def get_all_keyboards(debug=False):
-    all_devs = get_all_devices(debug)
-    keyboards = []
-    for dev in all_devs:
-        if dev.__class__.__name__ == 'XKeyboard':
-            keyboards.append(dev)
-    return keyboards
+def get_all_master_devices(debug=False):
+    return [dev for dev in get_all_devices(debug) if dev.master_id is None]
+
 
 def get_device_by_id(id: int, debug=False):
     all_devices = get_all_devices(debug)
     for dev in all_devs:
         if dev.id == id:
             return dev
+
 
 def get_devices_by_name(**kwargs):
     debug = kwargs.get('debug') or False

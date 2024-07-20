@@ -45,6 +45,24 @@ def get_device_props(dev_id: int) -> PropsDict:
 
     return dev_props
 
+def get_dev_id(dev_line: str):
+    split = clean_split(dev_line.split())
+    dev_id = int(split[-4][3:])
+    return dev_id
+
+def get_dev_master_id(dev_line: str):
+    if "master" in dev_line:
+        return None
+    else:
+        split = clean_split(dev_line.split())
+        master_id = int(split[-1][1:][:-2])
+        return master_id
+
+def get_dev_name(dev_line: str):
+    split = clean_split(dev_line.split())
+    dev_name = " ".join(split[:-4])
+    return dev_name
+
 
 def get_devices_data() -> DeviceDataDict:
     xinput_list_out_lines = (
@@ -57,16 +75,12 @@ def get_devices_data() -> DeviceDataDict:
     for output_line in xinput_list_out_lines:
         if "Virtual core pointer" in output_line:
             is_pointer = True
-            continue
         if "Virtual core keyboard" in output_line:
             is_pointer = False
-            continue
 
-        line_split = clean_split(output_line.split())
-
-        dev_id = int(line_split[-4][3:])
-        dev_master_id = int(line_split[-1][1:][:-2])
-        dev_name = " ".join(line_split[:-4])
+        dev_id = get_dev_id(output_line)
+        dev_master_id = get_dev_master_id(output_line)
+        dev_name = get_dev_name(output_line)
         dev_props = get_device_props(dev_id)
 
         dev_count += 1
@@ -87,7 +101,5 @@ def get_devices_data() -> DeviceDataDict:
                 }
             }
         )
-        if is_pointer:
-            print(f"Device name: {dev_name}, button_map: {button_map}")
 
     return devs_data
