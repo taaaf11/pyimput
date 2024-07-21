@@ -156,25 +156,20 @@ def start_cli(all_devices, dev_id_dev_map):
     options_available = []
 
 
-def disable_device(dev_id_or_name: int | str):
-    ...
-
-
-def enable_device(dev_id_or_name: int | str):
-    ...
-
-
 def main():
     all_devices = [
         dev
         for dev in get_all_devices()
-        if "TEST" not in dev.name and ((dev.master_id is not None) or (dev.floating))
+        if "XTEST" not in dev.name and ((dev.master_id is not None) or (dev.floating))
     ]
 
     dev_id_dev_map = dict({dev.id: dev for dev in all_devices})
 
     if len(sys.argv) == 1:
-        start_cli(all_devices, dev_id_dev_map)
+        try:
+            start_cli(all_devices, dev_id_dev_map)
+        except:
+            sys.exit(1)
 
     parser = AG()
 
@@ -188,19 +183,58 @@ def main():
     )
     apko_group.add_argument("-o", "--other", help="Get info about all other devices.", action="store_true")
 
-    parser.add_argument("-d", "--disable", type=str, help="Disable device.")
-    parser.add_argument("-e", "--enable", type=str, help="Enable device.")
+    parser.add_argument("-d", "--disable", nargs="+", type=str, help="Disable device.")
+    parser.add_argument("-e", "--enable", nargs="+" , type=str, help="Enable device.")
 
     args = parser.parse_args()
-    
-    if args.all_devices:
-        print_all_devs_with_numbers(all_devices)
-    elif args.pointers:
-        print_pointers_with_numbers(all_devices)
-    elif args.keyboards:
-        print_keyboards_with_numbers(all_devices)
-    elif args.other:
-        print_other_devs_with_numbers(all_devices)
+
+    query_devs_opts = any([args.all_devices, args.pointers, args.keyboards, args.other])
+    enable_disable_opts = any([args.enable, args.disable])
+
+
+    if query_devs_opts:
+        if args.all_devices:
+            print_all_devs_with_numbers(all_devices)
+        elif args.pointers:
+            print_pointers_with_numbers(all_devices)
+        elif args.keyboards:
+            print_keyboards_with_numbers(all_devices)
+        elif args.other:
+            print_other_devs_with_numbers(all_devices)
+        sys.exit(0)
+
+    if enable_disable_opts:
+        id_or_names = args.enable or args.disable
+        if args.enable:
+            selected_devices = []
+            for id_or_name in id_or_names:
+                try:
+                    id_ = int(id_or_name)
+                    selected_device = [dev for dev in all_devices if dev.id == id_][0]
+                    selected_devices.append(selected_device)
+                    selected_device.disable()
+                except ValueError:
+                    name = id_or_name
+                    devs_with_name = get_devices_by_name(contains=name)
+                    selected_devices.expand(devs_with_name)
+                for dev in selected_devices:
+                    dev.enable()
+                    
+        if args.disable:
+            selected_devices = []
+            for id_or_name in id_or_names:
+                try:
+                    id_ = int(id_or_name)
+                    selected_device = [dev for dev in all_devices if dev.id == id_][0]
+                    selected_devices.append(selected_device)
+                    selected_device.disable()
+                except ValueError:
+                    name = id_or_name
+                    devs_with_name = get_devices_by_name(contains=name)
+                    selected_devices.expand(devs_with_name)
+                for dev in selected_devices:
+                    dev.disable()
+                
 
 if __name__ == "__main__":
     main()
