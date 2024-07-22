@@ -108,6 +108,8 @@ def print_available_pointer_buttons(pointer):
             ]
         )
     )
+    
+    return count_label_map
 
 
 def start_cli(all_devices, dev_id_dev_map):
@@ -135,18 +137,19 @@ def start_cli(all_devices, dev_id_dev_map):
         case 2:
             selected_device.disable()
         case 3:
-            print_available_pointer_buttons(selected_device)
-            selected_swap_choices = [
-                int(_)
-                for _ in input(
-                    "Enter any two of the numbers of available buttons above, separated by space: "
-                ).split()
-            ]
-            selected_swapping_labels = [
-                count_label_map[_].replace(" ", "_").lower()
-                for _ in selected_swap_choices
-            ]
-            selected_device.swap_with(*selected_swapping_labels)
+            count_label_map = print_available_pointer_buttons(selected_device)
+            swap_choices = input("Enter button numbers to be swapped (as 2 3;4 5): ")
+            swap_labels = []
+            for choice in swap_choices.split(';'):
+                num_to_swap, num_to_be_swapped_with = choice.split(' ')
+                label_to_swap, label_to_be_swapped_with = count_label_map[int(num_to_swap)], count_label_map[int(num_to_be_swapped_with)]
+                label_to_swap = label_to_swap.replace(' ', '_').lower()
+                label_to_be_swapped_with = label_to_be_swapped_with.replace(' ', '_').lower()
+
+                swap_labels.append((label_to_swap, label_to_be_swapped_with))
+
+            for choice in swap_labels:
+                selected_device.swap_with(*choice)
         case 4:
             print_available_pointer_buttons(selected_device)
         case _:
@@ -168,7 +171,7 @@ def main():
     if len(sys.argv) == 1:
         try:
             start_cli(all_devices, dev_id_dev_map)
-        except:
+        except KeyboardInterrupt:
             sys.exit(1)
 
     parser = AG()
