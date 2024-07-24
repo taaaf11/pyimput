@@ -1,5 +1,6 @@
 import subprocess
 from typing import List, Sequence
+from string import ascii_lowercase, digits
 
 from type import PropsDict
 
@@ -52,3 +53,56 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
             )
 
     return prop_details
+
+
+def get_keys_with_types() -> dict:
+    keysyms = {}
+
+    special = ["minus", "equal", "bracketleft", "bracketright", "semicolon", "apostrophe", "comma", "period", "slash"]
+    keycodes_output = get_command_output(["sh", "-c", "xmodmap -pke"]).split('\n')[:-1]
+
+    for line in keycodes_output:
+        split = line.split()
+        keycode, values = int(split[1]), split[3:]
+
+        # this variable signifies whether the "normal" and Shift variants of the
+        # key are similar, as in "q" and "Q".
+        # It also shows whether the Shift variant is "NoSymbol".
+        is_similar = False
+
+        if len(values) == 0:
+            continue
+
+        if values[0] == values[1].lower() or values[1] == 'NoSymbol':
+            is_similar = True
+
+        if values[0] in ascii_lowercase:
+            alphabets = keysyms.get('alphabets') or {}
+            if is_similar:
+                alphabets.update({keycode: values[0].capitalize()})
+            else:
+                alphabets.update({keycode: " ".join(values[:2]).title()})
+
+            keysyms.update({'alphabets': alphabets})
+
+        elif values[0] in digits:
+            numbers = keysyms.get('numbers') or {}
+            if is_similar:
+                numbers.update({keycode: values[0].capitalize()})
+            else:
+                numbers.update({keycode: " ".join(values[:2]).title()})
+
+            keysyms.update({'numbers': numbers})
+
+    return keysyms
+
+
+def get_keysyms_enumeration(keysyms_dict: dict) -> dict:
+    sorted_keys = sorted(keysyms_dict.keys())
+    values = []
+    for s_key in sorted_keys:
+        for keycode, keysym in keysyms_dict[s_key].items():
+            values.append((keycode, keysym))
+
+    return dict(enumerate(values, start=1))
+

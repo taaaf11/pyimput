@@ -1,19 +1,36 @@
 import subprocess
 from collections import UserList
 from dataclasses import dataclass
-from typing import Union
+from typing import List, Union
 
 
-@dataclass
 class Property:
-    id: int
-    name: str
-    dev_id: int
-    values: list[str]
-    debug: False
+    def __init__(
+        self, id: int, name: str, dev_id: int, values: list[str], debug: False
+    ):
+        self.__id = id
+        self.__name = name
+        self.__dev_id = dev_id
+        self.__values = values
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @property
+    def dev_id(self) -> int:
+        return self.__dev_id
+
+    @property
+    def values(self) -> List[str]:
+        return self.__values
 
     def change_value(self, new_value: str) -> None:
-        self.values = new_value.split(" ")
+        self.__values = new_value.split(" ")
         if self.debug:
             return self.values
         else:
@@ -83,3 +100,4 @@ class Properties(UserList):
             return item in self.__prop_names
         elif isinstance(item, Property):
             return item in self.data
+        return False

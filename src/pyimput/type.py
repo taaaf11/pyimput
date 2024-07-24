@@ -7,7 +7,7 @@ class XInputDeviceMode(Enum):
     RELATIVE = 2
 
 
-PropsDict = Dict[str, Union[int, str, List[str]]]
+PropsDict = Dict[str, Dict[str, Union[int, str, List[str]]]]
 DeviceDataDict = Dict[str, Union[int, str, Dict]]
 ButtonsMapDict = Dict[str, str]
 OptionalString = Optional[str]

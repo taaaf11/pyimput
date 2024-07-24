@@ -1,12 +1,8 @@
 import subprocess
 
 from type import ButtonsMapDict, DeviceDataDict, PropsDict
-from utils import (
-    clean_split,
-    get_command_output,
-    get_prop_details_from_prop_line,
-    slugify_label,
-)
+from utils import (clean_split, get_command_output,
+                   get_prop_details_from_prop_line, slugify_label)
 
 
 def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
@@ -33,6 +29,21 @@ def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
     )
 
     return button_map
+
+
+def get_keyboard_keycodes_map() -> dict:
+    keycodes_map = {}
+    keycode_lines = get_command_output(["sh", "-c", "xmodmap -pke"]).split('\n')[:-1]
+
+    for keycode_line in keycode_lines:
+        split = [_ for _ in keycode_line.split(' ') if len(_) != 0]
+
+        keycode = int(split[1])
+        keysym = ' '.join(split[3:])
+
+        keycodes_map.update({keycode: keysym})
+
+    return keycodes_map
 
 
 def get_device_props(dev_id: int) -> PropsDict:
@@ -82,12 +93,15 @@ def get_devices_data() -> DeviceDataDict:
     devs_data = {}
     dev_count = 0
     is_pointer = False
+    is_keyboard = False
 
     for output_line in xinput_list_out_lines:
-        if "Virtual core pointer" in output_line:
+        if "pointer" in output_line:
             is_pointer = True
-        if "Virtual core keyboard" in output_line:
+            is_keyboard = False
+        if "keyboard" in output_line:
             is_pointer = False
+            is_keyboard = True
 
         dev_id = get_dev_id(output_line)
         dev_master_id = get_dev_master_id(output_line)
@@ -102,6 +116,11 @@ def get_devices_data() -> DeviceDataDict:
         else:
             button_map = None
 
+        if is_keyboard:
+            keycodes_map = get_keyboard_keycodes_map()
+        else:
+            keycodes_map = None
+
         devs_data.update(
             {
                 dev_count: {
@@ -110,6 +129,7 @@ def get_devices_data() -> DeviceDataDict:
                     "device_name": dev_name,
                     "is_floating": dev_is_floating,
                     "button_map": button_map,
+                    "keycodes_map": keycodes_map,
                     "props": dev_props,
                 }
             }
