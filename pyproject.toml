@@ -12,3 +12,6 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
 
 ]
+
+[project.scripts]
+pyimput = "pyimput.main:main"
