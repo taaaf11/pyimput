@@ -1,7 +1,7 @@
 import subprocess
 from typing import List, Sequence, Union
 
-from type import XInputDeviceMode
+from type import XInputDeviceMode, XInputDeviceCategory
 
 from .properties import Properties
 
@@ -24,6 +24,8 @@ class XInputDevice:
         self.__master_id = device_data["master_id"]
         self.__floating = device_data["is_floating"]
         self.__props = Properties(device_data["props"], debug)
+        self.__category = XInputDeviceCategory.OTHER
+        self.__debug = debug
 
     @property
     def id(self) -> int:
@@ -44,6 +46,10 @@ class XInputDevice:
     @property
     def props(self) -> Properties:
         return self.__props
+
+    @property
+    def category(self) -> XInputDeviceProperty:
+        return self.__category
 
     @property
     def debug(self) -> bool:

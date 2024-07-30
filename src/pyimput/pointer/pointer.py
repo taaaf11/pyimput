@@ -1,7 +1,7 @@
 import subprocess
 
 from device import XInputDevice
-from type import ButtonsMapDict, DeviceDataDict
+from type import XInputDeviceCategory, ButtonsMapDict, DeviceDataDict
 
 from .pointer_buttons import XPointerButtons
 
@@ -12,6 +12,7 @@ class XPointer(XInputDevice):
         self.__buttons_map = XPointerButtons(
             pointer_data["id"], pointer_data["button_map"], debug=debug
         )
+        self.__category = XInputDeviceCategory.POINTER
         self.change_button_map = lambda: setattr(
             self,
             "__buttons_map",
@@ -25,6 +26,10 @@ class XPointer(XInputDevice):
     @property
     def buttons_map(self) -> ButtonsMapDict:
         return self.__buttons_map
+
+    @property
+    def category(self) -> XInputDeviceCategory:
+        return self.__category
 
     def swap_with(self, button_label_to_swap: str, button_label_to_swap_with: str):
         self.buttons_map.swap_with(button_label_to_swap, button_label_to_swap_with)

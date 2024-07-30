@@ -1,4 +1,5 @@
 from device import XInputDevice
+from type import XInputDeviceCategory
 
 from .keys import Keys
 
@@ -7,7 +8,12 @@ class XKeyboard(XInputDevice):
     def __init__(self, keyboard_data: dict, debug=False):
         super().__init__(keyboard_data, debug)
         self.__keys = Keys(keyboard_data["keycodes_map"])
+        self.__category = XInputDeviceCategory.KEYBOARD
         self.__debug = debug
+
+    @property
+    def category(self) -> XInputDeviceCategory:
+        return self.__category
 
     @property
     def debug(self) -> bool:

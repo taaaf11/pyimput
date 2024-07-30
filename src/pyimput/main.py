@@ -5,6 +5,7 @@ from argparse import ArgumentParser as AG
 
 from userspace import *
 from utils import get_keys_with_types, get_keysyms_enumeration
+from type import XInputDeviceCategory as XInputDeviceCategory
 
 PROG_NAME = "pyimput"
 PROG_NAME_STYLED = """
@@ -22,7 +23,7 @@ PROG_NAME_STYLED = """
 def print_pointers_with_numbers(all_devs: list):
     pointers = dict(
         enumerate(
-            [dev for dev in all_devs if dev.__class__.__name__ == "XPointer"],
+            [dev for dev in all_devs if dev.category == XInputDeviceCategory.POINTER],
             start=1,
         )
     )
@@ -39,7 +40,7 @@ def print_pointers_with_numbers(all_devs: list):
 def print_keyboards_with_numbers(all_devs: list):
     keyboards = dict(
         enumerate(
-            [dev for dev in all_devs if dev.__class__.__name__ == "XKeyboard"],
+            [dev for dev in all_devs if dev.category == XInputDeviceCategory.KEYBOARD],
             start=1,
         )
     )
@@ -56,7 +57,7 @@ def print_keyboards_with_numbers(all_devs: list):
 def print_other_devs_with_numbers(all_devs: list):
     other_devs = dict(
         enumerate(
-            [dev for dev in all_devs if dev.__class__.__name__ == "XInputDevice"],
+            [dev for dev in all_devs if dev.category == XInputDeviceCategory.OTHER],
             start=1,
         )
     )
@@ -93,8 +94,7 @@ def print_dev_options(dev):
 
 def print_available_device_buttons(dev):
     print("\nAvailable buttons:")
-    dev_class = dev.__class__.__name__
-    if dev_class == "XPointer":
+    if dev.category == XInputDeviceCategory.POINTER:
         count_label_map = dict(
             enumerate(dev.available_buttons(), start=1)
         )
@@ -109,7 +109,7 @@ def print_available_device_buttons(dev):
 
         return count_label_map
 
-    elif dev_class == "XKeyboard":
+    elif dev.category == XInputDeviceCategory.KEYBOARD:
         keycodes = get_keys_with_types()
         count_keycodes_map = get_keysyms_enumeration(keycodes)
         count = 0
@@ -133,20 +133,19 @@ def print_available_device_buttons(dev):
 
 
 def swapper_cli(dev) -> None:
-    dev_class = dev.__class__.__name__
     count_map = print_available_device_buttons(dev)
     swap_choices = input("Enter button numbers to be swapped (as 2 3;4 5): ")
 
     for choice in swap_choices.split(';'):
         num_to_swap, num_to_be_swapped_with = choice.split(' ')
-        if dev_class == "XPointer":
+        if dev.category == XInputDeviceCategory.POINTER:
             label_to_swap, label_to_be_swapped_with = count_map[int(num_to_swap)], count_map[int(num_to_be_swapped_with)]
             label_to_swap = label_to_swap.replace(' ', '_').lower()
             label_to_be_swapped_with = label_to_be_swapped_with.replace(' ', '_').lower()
 
             dev.swap_with(label_to_swap, label_to_be_swapped_with)
 
-        elif dev_class == "XKeyboard":
+        elif dev.category == XInputDeviceCategory.KEYBOARD:
             keycode_to_swap, keycode_to_swap_with = count_map[int(num_to_swap)][0], count_map[int(num_to_be_swapped_with)][0]
 
             dev.swap_keys(keycode_to_swap, keycode_to_swap_with)
