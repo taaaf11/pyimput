@@ -33,13 +33,13 @@ def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:
 
 def get_keyboard_keycodes_map() -> dict:
     keycodes_map = {}
-    keycode_lines = get_command_output(["sh", "-c", "xmodmap -pke"]).split('\n')[:-1]
+    keycode_lines = get_command_output(["sh", "-c", "xmodmap -pke"]).split("\n")[:-1]
 
     for keycode_line in keycode_lines:
-        split = [_ for _ in keycode_line.split(' ') if len(_) != 0]
+        split = [_ for _ in keycode_line.split(" ") if len(_) != 0]
 
         keycode = int(split[1])
-        keysym = ' '.join(split[3:])
+        keysym = " ".join(split[3:])
 
         keycodes_map.update({keycode: keysym})
 

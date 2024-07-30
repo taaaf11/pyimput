@@ -23,15 +23,11 @@ class Keys(UserDict):
 
         command = f'xmodmap -e "keycode {keycode_to_swap} = {self.data[keycode_to_swap_with]}"'
         self.__data[keycode_to_swap] = self.data[keycode_to_swap_with]
-        run_command(
-            ["sh", "-c", command]
-        )
+        run_command(["sh", "-c", command])
 
         command = f'xmodmap -e "keycode {keycode_to_swap_with} = {temp}"'
         self.__data[keycode_to_swap_with] = temp
-        run_command(
-            ["sh", "-c", command]
-        )
+        run_command(["sh", "-c", command])
 
     def __setitem__(self, key, item) -> None:
         raise NotImplementedError()

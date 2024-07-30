@@ -1,7 +1,7 @@
 import subprocess
 from typing import List, Sequence, Union
 
-from type import XInputDeviceMode, XInputDeviceCategory
+from type import XInputDeviceCategory, XInputDeviceMode
 
 from .properties import Properties
 

@@ -1,6 +1,6 @@
 import subprocess
-from typing import List, Sequence
 from string import ascii_lowercase, digits
+from typing import List, Sequence
 
 from type import PropsDict
 
@@ -58,9 +58,21 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
 def get_keys_with_types() -> dict:
     keysyms = {}
 
-    specials = ["minus", "equal", "bracketleft", "bracketright", "semicolon", "apostrophe", "comma", "period", "slash", "grave", "backslash"]
-    
-    keycodes_output = get_command_output(["sh", "-c", "xmodmap -pke"]).split('\n')[:-1]
+    specials = [
+        "minus",
+        "equal",
+        "bracketleft",
+        "bracketright",
+        "semicolon",
+        "apostrophe",
+        "comma",
+        "period",
+        "slash",
+        "grave",
+        "backslash",
+    ]
+
+    keycodes_output = get_command_output(["sh", "-c", "xmodmap -pke"]).split("\n")[:-1]
 
     for line in keycodes_output:
         split = line.split()
@@ -74,36 +86,35 @@ def get_keys_with_types() -> dict:
         if len(values) == 0:
             continue
 
-        if values[0] == values[1].lower() or values[1] == 'NoSymbol':
+        if values[0] == values[1].lower() or values[1] == "NoSymbol":
             is_similar = True
 
         if values[0] in ascii_lowercase:
-            alphabets = keysyms.get('alphabets') or {}
+            alphabets = keysyms.get("alphabets") or {}
             if is_similar:
                 alphabets.update({keycode: values[0].capitalize()})
             else:
                 alphabets.update({keycode: " ".join(values[:2]).title()})
 
-            keysyms.update({'alphabets': alphabets})
+            keysyms.update({"alphabets": alphabets})
 
         elif values[0] in digits:
-            numbers = keysyms.get('numbers') or {}
+            numbers = keysyms.get("numbers") or {}
             if is_similar:
                 numbers.update({keycode: values[0].capitalize()})
             else:
                 numbers.update({keycode: " ".join(values[:2]).title()})
 
-            keysyms.update({'numbers': numbers})
+            keysyms.update({"numbers": numbers})
 
         elif values[0] in specials:
-            special = keysyms.get('special') or {}
+            special = keysyms.get("special") or {}
             if is_similar:
                 special.update({keycode: values[0].capitalize()})
             else:
                 special.update({keycode: " ".join(values[:2]).title()})
 
-            keysyms.update({'special': special})
-
+            keysyms.update({"special": special})
 
     return keysyms
 
@@ -116,4 +127,3 @@ def get_keysyms_enumeration(keysyms_dict: dict) -> dict:
             values.append((keycode, keysym))
 
     return dict(enumerate(values, start=1))
-
