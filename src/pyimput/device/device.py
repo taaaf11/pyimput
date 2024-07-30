@@ -48,7 +48,7 @@ class XInputDevice:
         return self.__props
 
     @property
-    def category(self) -> XInputDeviceProperty:
+    def category(self) -> XInputDeviceCategory:
         return self.__category
 
     @property
