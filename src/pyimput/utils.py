@@ -58,7 +58,8 @@ def get_prop_details_from_prop_line(dev_id: int, prop_line: str) -> PropsDict:
 def get_keys_with_types() -> dict:
     keysyms = {}
 
-    special = ["minus", "equal", "bracketleft", "bracketright", "semicolon", "apostrophe", "comma", "period", "slash"]
+    specials = ["minus", "equal", "bracketleft", "bracketright", "semicolon", "apostrophe", "comma", "period", "slash", "grave", "backslash"]
+    
     keycodes_output = get_command_output(["sh", "-c", "xmodmap -pke"]).split('\n')[:-1]
 
     for line in keycodes_output:
@@ -93,6 +94,16 @@ def get_keys_with_types() -> dict:
                 numbers.update({keycode: " ".join(values[:2]).title()})
 
             keysyms.update({'numbers': numbers})
+
+        elif values[0] in specials:
+            special = keysyms.get('special') or {}
+            if is_similar:
+                special.update({keycode: values[0].capitalize()})
+            else:
+                special.update({keycode: " ".join(values[:2]).title()})
+
+            keysyms.update({'special': special})
+
 
     return keysyms
 

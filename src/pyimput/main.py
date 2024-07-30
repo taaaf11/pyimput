@@ -124,6 +124,11 @@ def print_available_device_buttons(dev):
             count += 1
             print(f"{count}. {keysym_sem} ({keycode})")
 
+        print("\nSpecial characters:")
+        for keycode, keysym_sem in keycodes["special"].items():
+            count += 1
+            print(f"{count}. {keysym_sem} ({keycode})")
+
         return count_keycodes_map
 
 
@@ -209,6 +214,8 @@ def main():
     )
     apko_group.add_argument("-o", "--other", help="Get info about all other devices.", action="store_true")
 
+    parser.add_argument("--id", nargs="+", type=str, help="A space separated list of id's of devices to work with.")
+
     parser.add_argument("-d", "--disable", nargs="+", type=str, help="Disable device.")
     parser.add_argument("-e", "--enable", nargs="+" , type=str, help="Enable device.")
 
@@ -217,6 +224,8 @@ def main():
     query_devs_opts = any([args.all_devices, args.pointers, args.keyboards, args.other])
     enable_disable_opts = any([args.enable, args.disable])
 
+    if enable_disable_opts and not args.id:
+        ...
 
     if query_devs_opts:
         if args.all_devices:
