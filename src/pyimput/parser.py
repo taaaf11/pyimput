@@ -1,8 +1,12 @@
 import subprocess
 
 from .type import ButtonsMapDict, DeviceDataDict, PropsDict
-from .utils import (clean_split, get_command_output,
-                   get_prop_details_from_prop_line, slugify_label)
+from .utils import (
+    clean_split,
+    get_command_output,
+    get_prop_details_from_prop_line,
+    slugify_label,
+)
 
 
 def get_pointer_button_map(dev_id: int) -> ButtonsMapDict:

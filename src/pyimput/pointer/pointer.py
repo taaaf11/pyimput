@@ -2,7 +2,6 @@ import subprocess
 
 from ..device import XInputDevice
 from ..type import ButtonsMapDict, DeviceDataDict, XInputDeviceCategory
-
 from .pointer_buttons import XPointerButtons
 
 
