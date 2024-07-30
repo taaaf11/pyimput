@@ -3,9 +3,9 @@
 import sys
 from argparse import ArgumentParser as AG
 
-from type import XInputDeviceCategory as XInputDeviceCategory
-from userspace import *
-from utils import get_keys_with_types, get_keysyms_enumeration
+from .type import XInputDeviceCategory as XInputDeviceCategory
+from .userspace import *
+from .utils import get_keys_with_types, get_keysyms_enumeration
 
 PROG_NAME = "pyimput"
 PROG_NAME_STYLED = """

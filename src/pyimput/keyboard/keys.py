@@ -2,7 +2,7 @@ from collections import UserDict
 from types import MappingProxyType
 from typing import Optional
 
-from utils import run_command
+from ..utils import run_command
 
 
 class Keys(UserDict):

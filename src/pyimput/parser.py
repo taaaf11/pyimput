@@ -1,7 +1,7 @@
 import subprocess
 
-from type import ButtonsMapDict, DeviceDataDict, PropsDict
-from utils import (clean_split, get_command_output,
+from .type import ButtonsMapDict, DeviceDataDict, PropsDict
+from .utils import (clean_split, get_command_output,
                    get_prop_details_from_prop_line, slugify_label)
 
 

@@ -1,7 +1,7 @@
 import subprocess
 from typing import Sequence
 
-from type import ButtonsMapDict, OptionalString
+from ..type import ButtonsMapDict, OptionalString
 
 
 class XPointerButtons:

@@ -1,5 +1,5 @@
-from device import XInputDevice
-from type import XInputDeviceCategory
+from ..device import XInputDevice
+from ..type import XInputDeviceCategory
 
 from .keys import Keys
 

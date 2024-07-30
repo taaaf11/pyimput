@@ -1,8 +1,8 @@
-from parser import get_devices_data
+from .parser import get_devices_data
 
-from device import XInputDevice
-from keyboard import XKeyboard
-from pointer import XPointer
+from .device import XInputDevice
+from .keyboard import XKeyboard
+from .pointer import XPointer
 
 __all__ = [
     "get_all_devices",

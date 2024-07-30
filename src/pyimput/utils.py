@@ -2,7 +2,7 @@ import subprocess
 from string import ascii_lowercase, digits
 from typing import List, Sequence
 
-from type import PropsDict
+from .type import PropsDict
 
 
 def get_command_output(command: list):
