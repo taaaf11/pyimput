@@ -13,6 +13,11 @@ class XInputDeviceCategory(Enum):
     OTHER = "other"
 
 
+class GetByNameMethod(Enum):
+    CONTAINS = "contains"
+    EQ = "eq"
+
+
 PropsDict = Dict[str, Dict[str, Union[int, str, List[str]]]]
 DeviceDataDict = Dict[str, Union[int, str, Dict]]
 ButtonsMapDict = Dict[str, str]

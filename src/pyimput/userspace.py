@@ -2,6 +2,7 @@ from .device import XInputDevice
 from .keyboard import XKeyboard
 from .parser import get_devices_data
 from .pointer import XPointer
+from .type import GetByNameMethod
 
 __all__ = [
     "get_all_devices",
@@ -37,22 +38,16 @@ def get_device_by_id(id: int, debug=False):
             return dev
 
 
-def get_devices_by_name(**kwargs):
-    debug = kwargs.get("debug") or False
+def get_devices_by_name(name: str, method: GetByNameMethod = GetByNameMethod.EQ, debug=False):
     all_devs = get_all_devices(debug)
     req_devs = []
-    for arg, param in kwargs.items():
-        for dev in all_devs:
-            if arg == "eq":
-                if dev.name == param:
-                    return [dev]
-            if arg in ["startswith", "endswith"]:
-                dev_present = getattr(dev.name, arg)(param)
-                if dev_present:
-                    req_devs.append(dev)
-            elif arg == "contains":
-                if param in dev.name:
-                    req_devs.append(dev)
+    for dev in all_devs:
+        if method == GetByNameMethod.CONTAINS:
+            if name in dev.name:
+                req_devs.append(dev)
+        if method == GetByNameMethod.EQ:
+            if name == dev.name:
+                req_devs.append(dev)
     return req_devs
 
 
